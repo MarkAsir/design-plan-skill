@@ -1,0 +1,4 @@
+interface:
+  display_name: "设计与计划整改"
+  short_description: "复核当前门禁问题后按授权边界修订设计或计划并交付复审证据"
+  default_prompt: "使用 $design-plan-remediation 复核当前门禁发现，只修订获授权的设计或计划产物并交付候选关闭证据。"

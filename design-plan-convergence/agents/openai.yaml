@@ -1,0 +1,4 @@
+interface:
+  display_name: "设计与规划收敛审核"
+  short_description: "按阶段与风险审核设计、计划及修复后的规划产物并给出门禁结论"
+  default_prompt: "使用 $design-plan-convergence 对指定设计或实施计划执行只读、风险适配的目标门禁审核。"
