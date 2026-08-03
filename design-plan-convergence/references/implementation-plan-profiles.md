@@ -73,6 +73,23 @@ Merge when a fragment has no independent observable result, oracle, safe
 commit/revert boundary, or meaning without its neighbor. Split by behavior,
 compatibility phase, or failure boundary, not by files, functions, or lines.
 
+#### Commit-state coherence
+
+Every declared commit or handoff boundary must leave affected implementation,
+tests, contracts, and executable owners mutually consistent, and the affected
+surface buildable or importable and minimally verifiable. An incoherent boundary
+is `REQUIRED` unless it independently meets the parent `BLOCKER` definition.
+
+- A TDD red state may exist inside an uncommitted task, but must not be declared
+  as a commit or handoff boundary.
+- Move an implementation owner, executable entry point, and affected contract
+  tests atomically unless an approved staged compatibility boundary keeps every
+  intermediate state valid.
+- When work is staged across tasks without commit, identify the staged scope,
+  why it remains uncommitted, and the task that completes the atomic commit.
+- Run the smallest relevant gate at each boundary; require the full suite only
+  when governing rules or affected risk require it.
+
 ### Risk
 
 - Destructive actions, compatibility boundaries, trust boundaries, and production activation have prerequisites and safe recovery/fail-closed ownership.

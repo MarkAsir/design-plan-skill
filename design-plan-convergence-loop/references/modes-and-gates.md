@@ -48,6 +48,32 @@ Superpowers headers, code-block cadence, TDD phrasing, or commit boundaries
 unless project rules independently require them. Creation/regeneration remains
 owned by the applicable plan-writing workflow.
 
+## Artifact-native validation
+
+After adapter selection in DESIGN-ONLY or PLAN-ONLY, treat artifact-native
+validation as adapter-scoped, capability-aware evidence, not a convergence
+stage. Select the adapter from authoritative artifact signals and governing
+rules; CLI availability affects evidence, not adapter identity.
+
+| Validator status | Safe and authorized now | Action |
+|---|---:|---|
+| Exact validator/action is mandatory | Yes | Run the safe, read-only validation and bind its result to the current snapshot. |
+| Exact validator/action is mandatory | No | After one safe check, mark it `UNVERIFIED` and retain `REQUIRED` until waived or amended; equivalent evidence cannot substitute. |
+| A property/evidence outcome is mandatory | Equivalent current evidence exists | Accept it under the parent evidence contract; otherwise retain `REQUIRED`. |
+| Adapter recommends it but no governing source requires it | Yes | Run only when it provides low-cost evidence for the current gate. |
+| Adapter recommends it but no governing source requires it | No | Skip it without a finding. |
+| No validator is declared | Not applicable | Use semantic audit, fact verification, and snapshot binding. |
+
+- Never install, download, or upgrade a validator automatically or add a unified
+  validator preflight stage.
+- Availability is not authorization; writes, network access, or environment
+  changes follow the existing authorization boundary.
+- An unavailable or unauthorized validator does not itself create
+  `DECISION REQUIRED`; use that result only when the existing authorization
+  contract independently requires a decision.
+- Plain Markdown and custom formats require no OpenSpec, Superpowers, or other
+  framework command unless governing rules say so.
+
 ## COMBINED
 
 Use only when the user explicitly authorizes both design and plan artifacts in
@@ -55,14 +81,38 @@ one invocation. Treat it as two ordered sub-runs, never as simultaneous mutation
 
 1. complete the DESIGN-ONLY sub-run and freeze its DESIGN READY snapshot;
 2. if design changed, stop plan repair, route once to the applicable plan-writing
-   workflow, and start a new PLAN-ONLY generation only after a regenerated plan exists;
+   workflow, and start PLAN-ONLY with a new PlanAuditKey only after it issues a
+   new plan generation bound to that design snapshot;
 3. if design was already ready and unchanged, bind the existing plan to that
    snapshot with a new PlanAuditKey and continue PLAN-ONLY;
 4. grant PLAN READY only after both gates hold on their respective bound snapshots.
 
 The same invocation may continue across regeneration only when that separate
 plan-writing action is authorized. Otherwise return the routing result and
-stop. Never patch a plan whose upstream design snapshot changed.
+stop. A new generation may be materially unchanged. Rebind an existing plan
+only when the upstream design snapshot is unchanged; never patch an old plan to
+mask an upstream design change.
+
+### Design-to-plan handoff
+
+After a changed design reaches DESIGN READY, route to plan writing. Until its
+new plan exists, return `PLAN NOT READY: GENERATION REQUIRED`; snapshot change
+alone is not `UPSTREAM DESIGN REOPEN REQUIRED`. Hand off only:
+
+```text
+ordered frozen design artifact path/hash set, generation, and snapshot
+charter, observable result, scope, Non-Goals, and must-not-change behavior
+approved contracts/scenarios and verification ownership
+frozen decisions and validly routed unresolved decisions that do not affect DESIGN READY
+plan-relevant accepted concerns and routed items
+target plan format/path set and applicable authoring rules/workflow
+```
+
+Do not pass old findings, repair history, or modifier conclusions as design
+facts. Reuse the existing ledger when run state is already persisted. With an
+uninterrupted same-context handoff and no recovery need, pass these fields at
+runtime. Do not create a fixed manifest or another state mechanism for this
+handoff.
 
 Do not combine unrelated plans merely to reduce review cycles.
 
