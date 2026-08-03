@@ -68,15 +68,17 @@ audit is final. Return READY without a duplicate audit.
 
 ### 2. Admit and repair
 
-Send only active `BLOCKER` and `REQUIRED` findings to remediation. The modifier
-must recheck admission and edit root-cause batches, not blindly apply suggested
-wording. Any mutation invalidates earlier readiness.
+Route artifact-native validator conditions under the selected mode before
+remediation; the validator condition itself is not a remediable artifact
+finding. Send the remaining active `BLOCKER` and `REQUIRED` findings to
+remediation. The modifier must recheck admission and edit root-cause batches,
+not blindly apply suggested wording. Any mutation invalidates earlier readiness.
 
 Route without mutation:
 
 | Condition | Result |
 |---|---|
-| user decision, acceptance, or write authority missing | `DECISION REQUIRED` |
+| user decision, acceptance, or target-artifact mutation authority missing | `DECISION REQUIRED` |
 | environment unavailable after one safe check | mark evidence `UNVERIFIED`; keep `REQUIRED` when current-gate proof is missing, otherwise route `NEXT-STAGE NOTE` |
 | low-probability contained observation | `WATCH` |
 | work belongs to development, integration, verification, or release | `NEXT-STAGE NOTE` |

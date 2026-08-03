@@ -109,7 +109,7 @@ Activation rule:
 ## Final report
 
 ```markdown
-# Verdict: <GATE> READY | <GATE> NOT READY | DECISION REQUIRED
+# Verdict: <GATE> READY | <GATE> NOT READY | DECISION REQUIRED | PLAN NOT READY: GENERATION REQUIRED | UPSTREAM DESIGN REOPEN REQUIRED
 
 Snapshot / PlanAuditKey:
 

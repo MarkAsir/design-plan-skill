@@ -143,11 +143,19 @@ because later tests have not run. Require only gate-appropriate evidence:
 
 Use static contract audit, gate-appropriate safe rehearsal, and reverse
 traceability. At DESIGN/PLAN, rehearsal validates current facts and feasibility;
-it does not execute future implementation. After one safe unavailable check,
-label the evidence `UNVERIFIED` instead of waiting repeatedly. If the missing
-fact is required at the current gate and no alternate evidence proves it, keep
-an active `REQUIRED` finding and return NOT READY. Route it as
-`NEXT-STAGE NOTE` only when execution belongs to a later gate.
+it does not execute future implementation. Select adapters from artifact
+identity and governing rules, not installed CLI availability. Never install
+validators automatically or run one that writes, uses the network, or changes
+the environment without authorization. After one safe unavailable or
+unauthorized check, mark the evidence `UNVERIFIED`.
+
+For an exact mandatory validator or action, equivalent evidence cannot
+substitute; retain `REQUIRED` until it succeeds on the current snapshot or the
+requirement is waived or amended. For a mandatory property or evidence outcome,
+equivalent current evidence may satisfy its parent contract; otherwise retain
+`REQUIRED`. Optional-validator unavailability alone creates no finding; continue
+the semantic audit. Missing execution authorization alone does not create
+`DECISION REQUIRED`. Route future-gate execution as `NEXT-STAGE NOTE`.
 
 ## Manage findings
 
@@ -164,7 +172,7 @@ Use project statuses when stricter. Otherwise:
 
 For each `BLOCKER` or `REQUIRED`, record the violated current-gate contract,
 evidence, root cause, siblings, minimum correction invariant, authorized
-boundary, and closure evidence. A modifier can return only `CANDIDATE CLOSED`.
+boundary, and closure evidence. A modifier may return a remediation-defined candidate outcome, but never `CLOSED` or READY.
 
 Read [references/templates.md](references/templates.md) only when a formal
 ledger, manifest, attestation, or report is required.
@@ -186,6 +194,7 @@ Declare READY only when:
 5. no unapproved scope change or repair-created subsystem remains; and
 6. the audited snapshot is unchanged.
 
-Lead with `<GATE> READY`, `<GATE> NOT READY`, or `DECISION REQUIRED`. Report
-blockers and required findings first, then accepted residuals, routed items,
-verified closures, and the next action.
+Lead with the terminal defined by the selected gate profile. Use `<GATE> READY`,
+`<GATE> NOT READY`, or `DECISION REQUIRED` only when the profile does not define
+a more specific routed terminal. Report blockers and required findings first,
+then accepted residuals, routed items, verified closures, and the next action.

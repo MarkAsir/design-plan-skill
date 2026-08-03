@@ -46,10 +46,11 @@ chains may be cached in the mutable ledger only for this run.
 
 The final blind auditor is the sole exception: it may atomically replace only
 `final-audit-checkpoint.json` through the fixed temporary file
-`.final-audit-checkpoint.json.tmp`. It remains read-only to artifacts, frozen
-state, and the active ledger. The coordinator validates but never rewrites this
-file while that auditor is running. After the attempt stops, the coordinator
-may atomically change only its status to `INCOMPLETE`.
+`.final-audit-checkpoint.json.tmp`. It remains read-only to its allowed
+final-audit inputs and has no access to the active ledger. The coordinator
+validates but never rewrites this file while that auditor is running. After the
+attempt stops, the coordinator may atomically change only its status to
+`INCOMPLETE`.
 
 Archive historical reports, superseded snapshots, rejected approaches, and
 modifier explanations outside the default context. Intermediate handoffs
