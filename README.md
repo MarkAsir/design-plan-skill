@@ -19,6 +19,7 @@ Supported document formats include:
 - OpenSpec change artifacts, including proposal, spec, design, and tasks roles.
 - Superpowers implementation plans.
 - Generic design documents and implementation plans that do not follow a fixed framework.
+- Design and implementation-plan artifacts whose frozen scope explicitly includes user-visible UI/UX behavior.
 
 ## Core features
 
@@ -30,6 +31,7 @@ Supported document formats include:
 - Finding routing: distinguishes `BLOCKER`, `REQUIRED`, `CONCERN`, `WATCH`, `NEXT-STAGE NOTE`, `OUT OF SCOPE`, `REJECTED`, and related dispositions.
 - Scope control: does not modify implementation, tests, external systems, or frozen upstream decisions. The remediation skill produces only `CANDIDATE CLOSED`; an independent audit confirms final closure.
 - Stage-appropriate verification: design review retains behavior, acceptance scenarios, and verification ownership; plan review checks paths, dependencies, ordering, commands, and stable oracles without presenting future execution as completed work.
+- Bounded UI/UX planning: when UI/UX behavior is explicitly in scope, audits critical journeys, relevant user-visible states, governing constraints, ownership, traceability, and stable oracles without generating mockups, scoring aesthetics, or prescribing frontend implementation details.
 
 ## The three skills
 
@@ -57,6 +59,13 @@ For an implementation plan:
 ```text
 Use $design-plan-convergence to audit <plan-file> at the PLAN READY gate.
 Treat the upstream design as a frozen baseline and check dependency, granularity, risk, coverage, and feasibility.
+```
+
+For a design or plan with explicit UI/UX scope:
+
+```text
+Use $design-plan-convergence to audit <design-or-plan-path> at the appropriate document gate.
+Apply the bounded UI/UX planning profile only to in-scope user-visible behavior; do not generate visual artifacts or expand into frontend implementation.
 ```
 
 ### Multi-round audit and remediation
@@ -108,6 +117,12 @@ The review follows the full chain from evidence to contract, decision, work, ver
 | Risk        | Whether destructive actions, compatibility boundaries, trust boundaries, production activation, rollback, and fail-closed behavior have safe sequencing and ownership.         |
 | Coverage    | Whether every approved contract maps to implementation work and verification, and every task traces back to an approved contract.                                              |
 | Feasibility | Whether paths, symbols, interfaces, tools, working directories, prerequisites, commands, expected results, and failure interpretation are valid today.                         |
+
+When the frozen scope authoritatively includes UI/UX behavior, the audit also
+checks the critical journey, only the user-visible states that affect in-scope
+behavior or a stable oracle, applicable governing constraints, ownership, and
+design-to-plan traceability. It does not judge aesthetic quality or require a
+fixed component structure, viewport matrix, or test type.
 
 ## Gate scope
 
@@ -173,7 +188,7 @@ design-plan-remediation/
 └── references/
 ```
 
-The `references/` directories contain rules for generic designs, implementation plans, risk gates, evidence snapshots, state orchestration, and remediation admission. The skills select the relevant rules by document type and do not force generic documents into an OpenSpec directory layout.
+The `references/` directories contain rules for generic designs, bounded UI/UX planning, implementation plans, risk gates, evidence snapshots, state orchestration, and remediation admission. The skills select the relevant rules by authoritative artifact scope and document type, and do not force generic documents into an OpenSpec directory layout.
 
 ## License
 

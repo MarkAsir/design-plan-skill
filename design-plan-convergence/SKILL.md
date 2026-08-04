@@ -1,6 +1,6 @@
 ---
 name: design-plan-convergence
-description: Audit plain or structured technical design documents, OpenSpec artifacts, generic or Superpowers implementation plans, and repaired planning documents for the current readiness gate. Use for read-only design or plan review, artifact-role normalization, re-audit, semantic-drift and scope-creep checks, plan-only review against an approved design, or risk-proportionate closure without expanding into implementation or release verification.
+description: Use when a plain or structured technical design, OpenSpec artifact, generic or Superpowers implementation plan, repaired planning document, or design or plan artifact whose frozen scope includes user-visible UI/UX behavior needs read-only current-gate review, artifact-role normalization, re-audit, semantic-drift or scope-creep checking, plan-only review against an approved design, or risk-proportionate closure.
 ---
 
 # Design and Plan Convergence Audit
@@ -49,6 +49,10 @@ For an implementation plan or plan-only request, read
 [references/implementation-plan-profiles.md](references/implementation-plan-profiles.md).
 For design artifacts that are not OpenSpec, read
 [references/generic-design-profile.md](references/generic-design-profile.md).
+For design or plan artifacts whose frozen scope authoritatively includes
+user-visible UI/UX behavior, read
+[references/ui-ux-planning-profile.md](references/ui-ux-planning-profile.md).
+Do not select this profile from frontend technology or UI-related keywords alone.
 For independent closure, re-audit, or multi-cycle work, read
 [references/evidence-isolation-snapshots.md](references/evidence-isolation-snapshots.md).
 
@@ -88,8 +92,10 @@ At `PLAN READY`, audit the plan against frozen upstream design through:
 4. **Coverage**: every approved contract maps to work and verification; every task maps back to an approved contract.
 5. **Feasibility**: current paths, symbols, interfaces, tools, cwd, prerequisites, commands, and oracles are credible.
 
-Do not import a global “cover every edge case” objective. Optional UI, DX,
-security, or operations lenses apply only when the frozen scope contains them.
+Do not import a global “cover every edge case” objective. Apply the bounded
+UI/UX planning profile only when its authoritative-scope trigger holds. Other
+optional DX, security, or operations lenses apply only when the frozen scope
+contains them.
 Automate checks that are repeated, high-risk, cross-service, or prone to false
 positives; do not add a script merely to make a one-time low-risk review look
 complete.
