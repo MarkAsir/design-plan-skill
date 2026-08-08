@@ -6,14 +6,15 @@ Use the minimum topology that preserves separation:
 
 ```text
 coordinator
-|- initial/final read-only auditor
+|- read-only discovery auditor/certifier
 `- authorized modifier
 ```
 
-When isolated agents or contexts are available, use a fresh auditor for the
-initial and final full audits. Reuse one auditor for intermediate impact checks
-only if it did not mutate artifacts. Do not create one agent per lens or nested
-supervisors.
+When isolated agents or contexts are available, use fresh context for each
+open discovery audit. A read-only certifier may be reused for repeat
+certification because certification reads the active coverage state and is not
+blind. Never let the modifier certify its own repair. Do not create one agent
+per lens or nested supervisors.
 
 If isolation is unavailable, reconstruct a blind input from raw current
 artifacts, omit historical reports, disclose the limitation, and do not claim
@@ -33,10 +34,13 @@ Keep only the active ledger:
 ```text
 mode, gate, risk profile, charter, snapshot
 frozen and unresolved decisions
+Acceptance Kernel and artifact generation
+DIRECT roots, DERIVED proofs, and Scenario equivalence keys
+coverage obligations and global invariant status
 active BLOCKER and REQUIRED findings with closure contracts
 independently closed identities
 accepted concerns and routed watch/next-stage/out-of-scope items
-last mutation and audit snapshots
+discovery lineage, certification state, and last mutation/audit snapshots
 ```
 
 For a persisted run, the coordinator is the only writer. Store frozen boundary
@@ -44,7 +48,7 @@ state separately from the mutable ledger. Auditors and modifiers return claims
 to the coordinator rather than editing shared state directly. Key decision
 chains may be cached in the mutable ledger only for this run.
 
-The final blind auditor is the sole exception: it may atomically replace only
+The final blind discovery auditor is the sole exception: it may atomically replace only
 `final-audit-checkpoint.json` through the fixed temporary file
 `.final-audit-checkpoint.json.tmp`. It remains read-only to its allowed
 final-audit inputs and has no access to the active ledger. The coordinator
@@ -66,6 +70,13 @@ Before and after a modifier, independently inventory and hash editable paths and
 existing changed paths. Derive the mutation diff; do not trust the modifier's
 path report. Unexpected paths stop remediation and trigger boundary review.
 
+Any mutation invalidates readiness and certification on the old snapshot. Mark
+the affected decision-chain obligations and all global invariants
+`INVALIDATED`. A root-preserving mutation does not erase completed blind
+discovery for the current generation. A change to the Acceptance Kernel,
+artifact boundary, applicable rules/profile, or a key mechanism starts a new
+generation and requires new discovery.
+
 ## Convergence trend
 
 Compare active current-gate counts and root identities:
@@ -82,29 +93,34 @@ mixed: one count decreases and the other increases
        OR old findings close while new current-gate identities appear
 stalled: artifacts changed, B and R unchanged
 divergent: B rises
-           OR R rises in two consecutive cycles
-           OR same root survives two cycles
+           OR no obligation or broken edge closes
+           OR same root recurs after canonicalization
            OR repair adds an unapproved or independently deliverable
               capability/control plane/state/protocol
 ```
 
 Compare active finding identities as well as counts; a closure never offsets a
-repair-introduced finding. Track semantic growth beside counts. New tasks,
-phases, mechanisms, or large executable examples must trace to admitted
-findings and approved contracts.
-Otherwise classify the trend as apparent convergence and recheck the boundary.
+repair-introduced finding. Track failed/invalidated obligations, broken trace
+edges, duplicate Requirement/Scenario keys, and semantic growth beside counts.
+New contracts, tasks, phases, mechanisms, or executable examples must pass the
+growth admission gate. Otherwise classify the trend as apparent convergence
+and consolidate or replace the local patches.
 
-Allow one root-cause correction after a mixed result. Continue beyond two
-repairs only while strong convergence is proven. Repeated mixed, stalled, or
-divergent results require reconstruction, split/reset, upstream reopen, or
-`DECISION REQUIRED`; do not keep patching wording.
+After a mixed result, reconstruct the affected root before another mutation.
+Continue only while each cycle closes a known obligation or contradiction.
+Same-root recurrence requires canonicalization of the root and its shared
+semantic resources before another repair. Split/reset, reopen upstream, or
+return `DECISION REQUIRED` only when that reconstruction reveals the
+corresponding boundary condition.
 
 ## Audit cadence
 
-1. One initial full audit.
+1. One initial full discovery audit.
 2. If clean and unchanged, finish.
 3. After mutation, exact-diff and affected-chain audit.
-4. One final blind full audit after the last mutation.
+4. One final blind discovery audit for the current generation.
+5. After blind findings and every later mutation, repeat whole-artifact
+   certification until it passes on an unchanged snapshot.
 
 Upgrade an intermediate review to full after a gate, boundary, rule, risk
 profile, generation, unexpected path, key mechanism, or high-severity root
@@ -115,7 +131,7 @@ stop that branch under the gate-risk contract and finish every mandatory
 coverage partition. A forced session boundary returns a resumable incomplete
 state, never READY.
 
-## Final blind audit lifecycle
+## Final blind discovery lifecycle
 
 Use the mandatory coverage partitions frozen for the run. One blind auditor
 processes them sequentially; do not create one agent per partition. After each
@@ -149,8 +165,35 @@ partition from its beginning; a model's unreported reasoning is not resumable.
 
 When all partitions are complete, run one cross-partition synthesis over the
 current raw artifacts and checkpoint findings before freezing the verdict.
-Any artifact mutation or L1-view revision invalidates the checkpoint and
-requires a new final blind audit on the new inputs.
+Seal the discovery checkpoint as lineage evidence. A later artifact mutation
+prevents using its verdict as readiness evidence but does not reopen discovery
+for the same generation. A change to the Acceptance Kernel, boundary,
+rule/profile, or key mechanism starts a new generation and requires a new
+discovery audit. A minimal L1-view revision that only records authorized concern
+acceptance or write authority and leaves the kernel and evidence burden
+unchanged updates the active ledger without reopening discovery.
+
+## Whole-artifact certification lifecycle
+
+Store certification state in `active-ledger.json`; do not add another state
+file. The certifier reads the current artifacts, Acceptance Kernel, active
+findings, coverage obligations, and validator evidence. It checks every global
+invariant across the full artifact set and deeply rechecks invalidated
+obligations and affected decision chains.
+
+Resume interrupted certification from the active ledger's latest artifact
+snapshot when run, repository, generation, kernel, and boundary identities
+match. Do not apply the blind checkpoint's snapshot or minimal L1-view digest
+to certification resume.
+
+Bind `PASS`, `FAIL_KNOWN_OBLIGATION`, or `COVERAGE_ESCAPE` to the current
+snapshot. A repair invalidates only that certification and affected coverage.
+For an escape, record the reachable counterexample, DIRECT roots, and shared
+semantic resources; canonicalize the affected contracts and add only a missing
+obligation from the frozen applicable defect classes. Change generation only
+when re-saturation changes the kernel or proves its frozen applicability wrong.
+Complete re-saturation only after all affected obligations are `PASS`, `FAIL`,
+or `ROUTED`, duplicate keys are removed, and the canonical set digest is stored.
 
 ## Durable goal
 

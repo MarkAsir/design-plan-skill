@@ -189,7 +189,11 @@ ledger, manifest, attestation, or report is required.
 - If it finds no `BLOCKER` or `REQUIRED` and the snapshot stays unchanged, it is also the final audit; do not repeat it.
 - After mutation, inspect the exact diff plus the complete affected decision chain, siblings, removed semantics, and new mechanisms.
 - Upgrade an intermediate review to full after a gate, boundary, rule, profile, generation, or key mechanism changes.
-- After all repairs, perform one blind full audit on the stable final snapshot. Do not repeat without mutation or new evidence.
+- In a standalone re-audit, perform one blind full audit on the stable repaired
+  snapshot. Under `design-plan-convergence-loop`, follow its frozen cadence:
+  one final blind discovery per artifact generation, then whole-artifact
+  certification after root-preserving repairs. Do not interpret a certification
+  repair as a reason to restart blind discovery.
 
 Declare READY only when:
 

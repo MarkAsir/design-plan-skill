@@ -23,8 +23,8 @@ Supported document formats include:
 
 ## Core features
 
-- Multi-round convergence: initial audit → authorized remediation → impact audit → trend analysis → final blind audit.
-- Checkpoint and resume: preserves minimal run state across interruption, timeout, or session boundaries; revalidates run identity, gate, boundary, and snapshot before resuming, and starts a new audit generation when they no longer match.
+- Multi-round convergence: initial audit → authorized remediation → impact audit → trend analysis → final blind discovery → whole-artifact certification.
+- Checkpoint and resume: preserves minimal run state across interruptions; resumes certification from the latest ledger, restarts only an invalid blind attempt, and starts a new generation only when the kernel, rules, or review boundary changes.
 - Explicit gates: supports `DESIGN READY` and `PLAN READY` without automatically entering implementation or release gates.
 - Risk profiles: defaults to `AUTO` and also supports `LEAN` and `ASSURANCE`; deeper review is limited to high-risk slices such as security, data, compatibility, concurrency, and rollback.
 - Evidence isolation: uses the current snapshot, path state, file hashes, rule snapshots, and external fact revisions instead of treating old reports or remediation claims as current facts.

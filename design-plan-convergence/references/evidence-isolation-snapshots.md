@@ -22,7 +22,10 @@ finding identities, historical counts, old reports, modifier prose, expected
 answers, or candidate verdicts.
 
 Freeze the blind result, then reconcile prior finding identities on the same
-unchanged snapshot. If the snapshot changes, discard the verdict.
+unchanged snapshot. If the snapshot changes, discard the verdict as readiness
+evidence. Under `design-plan-convergence-loop`, retain only discovery-lineage
+completion and certify the repaired snapshot; do not restart blind discovery
+unless the artifact generation changes.
 
 When isolated agent context exists, use it for the initial and final audits,
 not for every lens. If it does not exist, remove history from the audit input
@@ -39,9 +42,11 @@ minimum correction, whether the repair introduced it, and why the initial or
 impact boundary did not expose it. Severity still follows current evidence:
 never downgrade a proved current-gate problem because the auditor cannot explain
 the earlier miss. If the contract, counterexample, or gate ownership is not
-proved, route the claim normally. If those are proved but the missed boundary
-cannot be bounded, invalidate audit saturation and reopen the affected mandatory
-partition or the full audit before remediation.
+proved, route the claim normally. Under `design-plan-convergence-loop`, route a
+proved missed boundary to `COVERAGE_ESCAPE` and re-saturate the affected DIRECT
+roots and shared semantic resources; start new blind discovery only when that
+changes the artifact generation. Otherwise invalidate saturation and reopen the
+affected mandatory partition or the full standalone audit before remediation.
 
 ## Active state versus history
 
@@ -77,7 +82,10 @@ verdict to its source snapshot.
 - One initial full-boundary audit.
 - If it is clean and unchanged, it is final.
 - After mutation, exact diff plus complete affected decision chain, siblings, removed semantics, and new mechanisms.
-- One blind final full-boundary audit after the last mutation.
+- One blind final full-boundary audit on a stable standalone repaired snapshot.
+- Under `design-plan-convergence-loop`, use one final blind discovery per
+  artifact generation and repeat closed-world certification after later
+  root-preserving mutations.
 
 Upgrade an intermediate review to full after boundary, charter, Non-Goal, gate,
 risk profile, rule, plan generation, unexpected path, key mechanism,

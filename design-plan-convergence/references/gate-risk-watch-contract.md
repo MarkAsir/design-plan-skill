@@ -46,6 +46,35 @@ If a competent executor can decide the detail locally without changing an
 approved contract, route it to development or the owning later stage. More
 specific wording is not itself evidence of higher readiness.
 
+## Contract and Scenario admission
+
+Classify contract roots in audit state; do not require a new artifact syntax:
+
+- `DIRECT` comes from user requirements, approved scope or decisions, external
+  compatibility/regulatory contracts, or mandatory project rules. No new L1
+  fact means no new DIRECT contract.
+- `DERIVED` is logically necessary to implement or protect DIRECT roots. It may
+  use intermediate proof steps, but record the ultimate DIRECT roots, derivation
+  chain, reachable counterexample without it, observable invariant, owner,
+  stable oracle, and duplication/subsumption check.
+
+Do not create a Requirement for an example, internal code location, unchanged
+service detail, repeated sibling wording, or one Scenario branch. Prefer an
+existing Requirement or Scenario whenever it already owns the behavior.
+
+Admit a new Scenario only for a previously uncovered equivalence key:
+
+```text
+DIRECT roots + precondition/state class + independent action/failure class
++ observable outcome/protected invariant + boundary semantics + oracle
+```
+
+Boundary semantics compare authority/trust, transaction or atomicity domain,
+side-effect domain, and failure outcome rather than service names. Equivalent
+sibling services share one representative Scenario plus an artifact-native
+coverage matrix. If the format cannot express that validly, keep only the
+minimum repeated Scenarios required by its validator.
+
 ## Classification
 
 Ask:
@@ -100,6 +129,19 @@ external backup is also corrupt: WATCH, manual drill, or separate resilience wor
 Stop when every approved contract and independent risk partition has at least
 one defect-detecting check or an explicit later-stage owner.
 
+Build finite coverage obligations from:
+
+- each contract root and its applicable defect classes above;
+- each explicit shared semantic resource and its protected invariant; and
+- global terminology, traceability, scope, ordering, security, and data
+  invariants.
+
+A shared resource is an actor/authority, action, state variable, persistence
+object, compatibility phase, output, transaction boundary, or rollback path
+named or necessarily implied by the approved artifacts. Group all roots sharing
+that resource in one obligation instead of creating pairwise Requirement
+combinations. Do not add recovery-of-recovery or a global Cartesian product.
+
 ## Test case admission
 
 Detailed test cases are not a DESIGN READY requirement. When evaluating whether
@@ -113,8 +155,7 @@ conditions hold:
 5. it verifies an explicit MUST/SHALL, is reachable from normal state by one
    independent input/action/failure, or has high failure impact.
 
-- `DIRECT`: maps to a requirement, scenario, decision, or invariant.
-- `DERIVED`: a necessary boundary or rejection class of an approved input/state.
+- `DIRECT` and `DERIVED` use the contract-root definitions above.
 - Independent defect: removing the case leaves no other case that detects the same defect.
 - Stable oracle: exit code, response, state, data, log, or deployment fact.
 - Stage: unit, integration, E2E, implementation verification, release, periodic, or isolated drill.

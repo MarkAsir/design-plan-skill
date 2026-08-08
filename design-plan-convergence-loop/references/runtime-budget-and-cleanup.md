@@ -10,7 +10,7 @@ Score each dimension `0/1/2`:
 | Dimension | 0 | 1 | 2 |
 |---|---|---|---|
 | planning artifacts | 1-2 | 3-5 | more than 5 |
-| contract units + plan tasks | up to 25 | 26-75 | more than 75 |
+| DIRECT/DERIVED roots + unique Scenario classes + plan tasks | up to 25 | 26-75 | more than 75 |
 | independent systems/environments | 1 | 2-3 | 4 or more |
 | admitted assurance slices | 0 | 1 | 2 or more |
 | external/runtime evidence | none | static external facts | dynamic or remote facts |
@@ -26,9 +26,9 @@ forces a stop, persist the checkpoint and return
 `AUDIT INCOMPLETE — RESUME REQUIRED`. Never interrupt an atomic partition or
 grant a verdict with mandatory coverage incomplete.
 
-## Final blind audit deadlines
+## Blind discovery and certification budgets
 
-The final blind audit uses profile deadlines independent of the complexity
+The final blind discovery audit uses profile deadlines independent of the complexity
 estimate above:
 
 | Profile | Soft deadline | Hard deadline |
@@ -51,13 +51,21 @@ A second error or the hard deadline returns
 invocation and do not grant READY from coordinator review or structural
 validation alone.
 
+Repeat whole-artifact certification uses the current complexity estimate, not
+a fresh blind-discovery deadline. Time is still not completion evidence. At a
+forced session boundary, persist completed certification partitions and resume
+on the matching snapshot; do not reopen blind discovery for a root-preserving
+repair.
+
 ## Coverage ledger
 
-Freeze the mandatory partitions for the selected gate and mark each
-`NOT_STARTED`, `IN_PROGRESS`, `DONE`, `ROUTED`, or `UNVERIFIED`. Typical
-partitions are charter/scope, contract coverage, dependency/phase ordering,
-compatibility chains, admitted assurance slices, bidirectional traceability,
-fact/command feasibility, and rollback or fail-closed ownership.
+Freeze the mandatory partitions and their contract, shared-resource, and global
+invariant obligations for the selected gate. Audit partitions use
+`NOT_STARTED`, `IN_PROGRESS`, `DONE`, `ROUTED`, or `UNVERIFIED`; certification
+obligations use `NOT_CHECKED`, `PASS`, `FAIL`, `ROUTED`, or `INVALIDATED`.
+Typical partitions are charter/scope, contract coverage, dependency/phase
+ordering, compatibility chains, admitted assurance slices, bidirectional
+traceability, fact/command feasibility, and rollback or fail-closed ownership.
 
 Completeness means every mandatory partition is `DONE` or validly `ROUTED`, not
 that the run consumed its estimate. Stop an over-deep branch with the
@@ -82,20 +90,23 @@ use an authorized repository-local exclusion or disclose the temporary
 untracked state.
 
 `frozen-run.json` contains run/repository identity, mode, gate, profile,
-charter, Non-Goals, frozen decisions, artifact/rule hashes, path boundaries,
-complexity estimate, and mandatory partitions. Freeze it after initialization.
-Do not store mutable write authorization, concern acceptance, or newly resolved
+charter, Non-Goals, frozen decisions, Acceptance Kernel, artifact generation,
+DIRECT roots, approved boundary semantics, applicable defect classes,
+initial artifact hashes, loaded rule/profile hashes, path boundaries, complexity
+estimate, and mandatory partitions. Freeze it after initialization. Do not
+store mutable write authorization, concern acceptance, or newly resolved
 decisions in this file.
 
-`active-ledger.json` contains coverage status, active finding identities and
-closure contracts, accepted/routed items, current chain IDs with source IDs,
-anchors, invariants, owners, oracles and evidence snapshots, mutation hashes,
-current L1 write authorizations and risk acceptances with their source/revision,
-trend, phase, and resume point. Store no raw artifacts, credentials, long
-reports, superseded findings, or modifier narratives. The coordinator is the
-only writer; replace the file atomically.
+`active-ledger.json` contains coverage and certification status, DERIVED proofs,
+Scenario equivalence keys, active finding identities and closure contracts,
+accepted/routed items, current chain IDs with source IDs, anchors, invariants,
+owners, oracles and evidence snapshots, current artifact snapshot, mutation
+hashes, discovery lineage, current L1 write authorizations and risk acceptances
+with their source/revision, trend, phase, and resume point. Store no raw
+artifacts, credentials, long reports, superseded findings, or modifier
+narratives. The coordinator is the only writer; replace the file atomically.
 
-`final-audit-checkpoint.json` is written only during the final blind audit and
+`final-audit-checkpoint.json` is written only during final blind discovery and
 only through `.final-audit-checkpoint.json.tmp`. It records the final-audit
 lineage, current snapshot and minimal L1-view digests,
 completed/current/pending partitions, its own findings, evidence status,
@@ -108,7 +119,7 @@ Persisted chain entries stabilize handoffs, not truth. Preserve authority
 levels: user decisions are L1, current verified evidence L2, auditor findings
 L3, and modifier claims L4. Recheck claims on the current snapshot.
 
-The first final blind auditor receives `frozen-run.json`, raw current artifacts,
+The final blind discovery auditor receives `frozen-run.json`, raw current artifacts,
 and a minimal source-bound L1 view of current user decisions and concern
 acceptances, not `active-ledger.json`. A resumed or replacement final auditor
 also receives the validated `final-audit-checkpoint.json` from the same lineage.
@@ -119,16 +130,24 @@ snapshot.
 
 ## Resume and cleanup
 
-Resume only when run ID, repository identity, artifact/rule hashes, boundary,
-generation, profile, gate, snapshot digest, and minimal L1-view digest still
-match. Otherwise discard the old final-audit checkpoint and start the required
-new audit generation.
+Resume an incomplete blind discovery checkpoint only when run ID, repository,
+boundary, generation, profile, gate, loaded rule/profile hashes, snapshot
+digest, and minimal L1-view digest still match. Otherwise discard only that
+checkpoint. Start a new generation only when the Acceptance Kernel, boundary,
+rule/profile, or key mechanism changed; otherwise restart final blind discovery
+on the current snapshot in the same generation.
 
-A new write authorization or concern acceptance that leaves the charter,
-scope, Non-Goals, gate, frozen decisions, and evidence burden unchanged updates
-only the active ledger and does not repeat the initial full audit. A user
-decision that changes any frozen boundary field starts a new generation and a
-new initial full audit.
+After discovery is complete, resume certification from the active ledger when
+run, repository, generation, kernel, and boundary identities match and the
+artifacts match its latest snapshot. A coordinator-recorded root-preserving
+mutation advances that snapshot and invalidates certification but preserves
+discovery lineage. An unexpected mutation stops resume for boundary review.
+
+A new write authorization, concern acceptance, or justified DERIVED contract
+that leaves the Acceptance Kernel, boundary, key mechanisms, and evidence
+burden unchanged updates only the active ledger and does not repeat discovery.
+A decision or repair that changes a frozen kernel field starts a new generation
+and a new initial full audit.
 
 Preserve runtime state for `DECISION REQUIRED`, `AUDIT INCOMPLETE`, or an
 unexpected interruption. On any terminal verdict, or when the user cancels,
